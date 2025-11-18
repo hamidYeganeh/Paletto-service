@@ -1,0 +1,19 @@
+{
+  "name": "paletto-services",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "ts-node src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
+  "dependencies": {
+    "fastify": "latest",
+    "mongodb": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "ts-node": "latest",
+    "typescript": "latest"
+  }
+}
