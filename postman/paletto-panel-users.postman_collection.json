@@ -1,0 +1,116 @@
+{
+  "info": {
+    "name": "Paletto Services - Panel Users API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:50001" },
+    { "key": "userId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Create User",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Alice\",\"email\":\"alice@example.com\"}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/panel/users"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201', function () { pm.response.to.have.status(201); });",
+              "const json = pm.response.json();",
+              "pm.expect(json).to.have.property('user');",
+              "pm.expect(json.user).to.have.property('_id');",
+              "pm.collectionVariables.set('userId', json.user._id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get User by ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/panel/users/{{userId}}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+              "const json = pm.response.json();",
+              "pm.expect(json).to.have.property('user');",
+              "pm.expect(json.user).to.have.property('_id');"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Update User by ID",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Alice Cooper\"}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/panel/users/{{userId}}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+              "const json = pm.response.json();",
+              "pm.expect(json).to.have.property('user');",
+              "pm.expect(json.user).to.have.property('_id');"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete User by ID",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/panel/users/{{userId}}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 204', function () { pm.response.to.have.status(204); });"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

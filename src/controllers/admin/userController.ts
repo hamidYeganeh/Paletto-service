@@ -8,7 +8,7 @@ import {
 
 export async function createUser(
   req: FastifyRequest<{ Body: { name?: string; email?: string } }>,
-  res: FastifyReply,
+  res: FastifyReply
 ) {
   try {
     const body = req.body;
@@ -16,14 +16,21 @@ export async function createUser(
       return res.status(400).send({ error: "name and email required" });
     const user = await createUserService(body.name, body.email);
     return res.status(201).send({ user });
-  } catch {
-    return res.status(500).send({ error: "internal error" });
+  } catch (error) {
+    console.log({ error });
+
+    return res
+      .status(500)
+      .send({
+        error: "internal error",
+        message: JSON.parse(JSON.stringify(error)),
+      });
   }
 }
 
 export async function getUser(
   req: FastifyRequest<{ Params: { id: string } }>,
-  res: FastifyReply,
+  res: FastifyReply
 ) {
   const id = String((req.params as { id: string }).id || "");
   if (!id) return res.status(400).send({ error: "id param required" });
@@ -37,8 +44,11 @@ export async function getUser(
 }
 
 export async function updateUser(
-  req: FastifyRequest<{ Params: { id: string }; Body: { name?: string; email?: string } }>,
-  res: FastifyReply,
+  req: FastifyRequest<{
+    Params: { id: string };
+    Body: { name?: string; email?: string };
+  }>,
+  res: FastifyReply
 ) {
   const id = String((req.params as { id: string }).id || "");
   if (!id) return res.status(400).send({ error: "id param required" });
@@ -59,7 +69,7 @@ export async function updateUser(
 
 export async function deleteUser(
   req: FastifyRequest<{ Params: { id: string } }>,
-  res: FastifyReply,
+  res: FastifyReply
 ) {
   const id = String((req.params as { id: string }).id || "");
   if (!id) return res.status(400).send({ error: "id param required" });
